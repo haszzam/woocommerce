@@ -333,9 +333,9 @@ class RestApiCacheTest extends WC_REST_Unit_Test_Case {
 	}
 
 	/**
-	 * @testdox Custom extract_entity_ids method can be overridden.
+	 * @testdox Custom extract_entity_ids_from_response method can be overridden.
 	 */
-	public function test_custom_extract_entity_ids_override() {
+	public function test_custom_extract_entity_ids_from_response_override() {
 		$custom_controller = new class() extends WP_REST_Controller {
 			// phpcs:disable Squiz.Commenting
 			use RestApiCache;
@@ -348,13 +348,13 @@ class RestApiCacheTest extends WC_REST_Unit_Test_Case {
 				$this->initialize_rest_api_cache();
 			}
 
-			protected function get_default_entity_type(): ?string {
+			protected function get_default_response_entity_type(): ?string {
 				return 'product';
 			}
 
-			protected function extract_entity_ids( array $data, WP_REST_Request $request, ?string $endpoint_id = null ): array {
+			protected function extract_entity_ids_from_response( array $response_data, WP_REST_Request $request, ?string $endpoint_id = null ): array {
 				$this->custom_extractor_called = true;
-				return isset( $data['product_id'] ) ? array( $data['product_id'] ) : array();
+				return isset( $response_data['product_id'] ) ? array( $response_data['product_id'] ) : array();
 			}
 
 			public function register_routes() {
@@ -553,7 +553,7 @@ class RestApiCacheTest extends WC_REST_Unit_Test_Case {
 				);
 			}
 
-			protected function get_default_entity_type(): ?string {
+			protected function get_default_response_entity_type(): ?string {
 				return $this->default_entity_type;
 			}
 
